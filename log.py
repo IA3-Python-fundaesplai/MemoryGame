@@ -23,7 +23,7 @@ class Log:
         """
         Representación de una instancia de la clase Log
         """
-        return f'Jugador: {self.player}'
+        return f'Jugador: {self.user}'
 
     def get_player_username(self):
         """
