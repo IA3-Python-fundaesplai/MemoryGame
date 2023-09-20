@@ -2,8 +2,19 @@ from tkinter import *
 
 
 def choice_card(index):
-    return cards[index].configure(highlightthickness=5, highlightbackground="red")
-
+    global count
+    if count < 2:
+        count += 1
+        return cards[index].configure(image=card_front_img, highlightthickness=5, highlightbackground="red")
+    elif count < 4:
+        count += 1
+        return cards[index].configure(image=card_front_img, highlightthickness=5, highlightbackground="blue")
+    elif count < 6:
+        count += 1
+        return cards[index].configure(image=card_front_img, highlightthickness=5, highlightbackground="yellow")
+    else:
+        count += 1
+        return cards[index].configure(image=card_front_img, highlightthickness=5, highlightbackground="green")
 
 def generate_card(index, image):
     return Button(image=image, highlightthickness=5, highlightbackground="#B1DDC6",
@@ -25,13 +36,13 @@ card_front_img = PhotoImage(file="images/ace_of_hearts.png")
 # canvas.grid(row=1, column=4, columnspan=4)
 
 cards = []
-
+count = 0
 for number in range(0, 8):
     if number < 4:
-        cards.append(generate_card(number, card_front_img))
+        cards.append(generate_card(number, card_back_img))
         cards[number].grid(row=0, column=number, rowspan=2, pady=20, padx=20)
     else:
-        cards.append(generate_card(number, card_front_img))
+        cards.append(generate_card(number, card_back_img))
         cards[number].grid(row=3, column=number - 4, rowspan=2, pady=20, padx=20)
 
 
