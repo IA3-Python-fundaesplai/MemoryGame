@@ -1,4 +1,4 @@
-# Clase Cards se encarga de gestionar las cartas del juego.
+# Clase Cards que se encarga de gestionar las cartas del juego.
 # Creado por JonFdz
 # GitHub: https://www.github.com/jonfdz
 # Versión: 1.0
@@ -10,11 +10,13 @@ class Cards:
     def __init__(self) -> None:
         self.back_img = PhotoImage(file="images/back_card.png")
         self.card_front_img = PhotoImage(file="images/ace_of_hearts.png")
-        self.cards_list = self.list_cards(0, 8, self.back_img)
+        self.cards_list = self.list_cards(0, 8, self.card_front_img)
         self.count = 0
+        self.choice = []
 
     def choice_card(self, index):
-        """Funcion que gestiona la seleccion de la carta. Determina que carta se pulsa y el color que la sobresalta para formar las parejas."""
+        """Funcion que gestiona la seleccion de la carta. Determina que carta se pulsa, cambia el color por parejas y añade la seleccion por orden a la lista choice"""
+        self.choice.append(index)
         if self.count < 2:
             self.count += 1
             return self.cards_list[index].configure(
@@ -60,3 +62,14 @@ class Cards:
                     row=3, column=number - 4, rowspan=2, pady=20, padx=20
                 )
         return list_cards
+
+    def flip_cards(self):
+        """Funcion para esconder las cartas."""
+        for card in range(0, 8):
+            self.cards_list[card].configure(image=self.back_img)
+
+    def destroy_cards(self):
+        """Funcion para detruir las cartas de la ventana."""
+        for index in range(0, len(self.cards_list)):
+            if isinstance(self.cards_list[index], Button):
+                self.cards_list[index].destroy()
