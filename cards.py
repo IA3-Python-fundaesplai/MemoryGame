@@ -5,14 +5,20 @@
 
 from tkinter import *
 
+
 class Cards:
     """Clase Cards que se encargara de gestionar todas las funcionalidades de las cartas."""
+
     def __init__(self) -> None:
+        self.BACKGROUND_COLOR = "#B1DDC6"
         self.back_img = PhotoImage(file="images/back_card.png")
         self.card_front_img = PhotoImage(file="images/ace_of_hearts.png")
         self.cards_list = self.list_cards(0, 8, self.card_front_img)
         self.count = 0
         self.choice = []
+        self.canvas = Canvas(
+            width=1200, height=900, bg=self.BACKGROUND_COLOR, highlightthickness=0
+        )
 
     def choice_card(self, index):
         """Funcion que gestiona la seleccion de la carta. Determina que carta se pulsa, cambia el color por parejas y añade la seleccion por orden a la lista choice"""
@@ -20,22 +26,30 @@ class Cards:
         if self.count < 2:
             self.count += 1
             return self.cards_list[index].configure(
-                image=self.card_front_img, highlightthickness=5, highlightbackground="red"
+                image=self.card_front_img,
+                highlightthickness=5,
+                highlightbackground="red",
             )
         elif self.count < 4:
             self.count += 1
             return self.cards_list[index].configure(
-                image=self.card_front_img, highlightthickness=5, highlightbackground="blue"
+                image=self.card_front_img,
+                highlightthickness=5,
+                highlightbackground="blue",
             )
         elif self.count < 6:
             self.count += 1
             return self.cards_list[index].configure(
-                image=self.card_front_img, highlightthickness=5, highlightbackground="yellow"
+                image=self.card_front_img,
+                highlightthickness=5,
+                highlightbackground="yellow",
             )
         else:
             self.count += 1
             return self.cards_list[index].configure(
-                image=self.card_front_img, highlightthickness=5, highlightbackground="green"
+                image=self.card_front_img,
+                highlightthickness=5,
+                highlightbackground="green",
             )
 
     def generate_card(self, index, image):
