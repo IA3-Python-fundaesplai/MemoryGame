@@ -58,7 +58,7 @@ class Log:
             pass
         return datetime.datetime.now().strftime(date_format)
 
-    def generate_file(self, scores):
+    def generate_file(self):
         """
         Función que genera el archivo donde se guardan las puntuaciones del usuario
         """
@@ -69,15 +69,9 @@ class Log:
 
         # Abrimos el archivo y actualizamos el contenido
         with open(file, 'w') as file:
-            file.write(f'Jugador: {self.user}')
-            file.write(f'\n----------------------\n')
-            file.write(f'Puntuaciones:\n')
-            file.write(f'{date}\n')
-
-            for score in scores:
-                file.write(f'{score}\n')
+            file.write(f'Jugador: {self.user} | conectado: {date}')
 
 
 # Instanciamos el objeto de la clase Log
 log = Log()
-log.generate_file(['10', '20', '30'])
+log.generate_file()
