@@ -1,24 +1,27 @@
 # Clase Scoreboard para guardar el registro de puntuaciones del usuario.
 # Creado por Aitor
 # GitHub: https://www.github.com/aitorias
-# Fecha: 2023/09/22
+# Fecha creación: 2023/09/22
+# Última actualización: 2023/09/23
 # Versión: 1.0
 
 import datetime
+import json
 import locale
+import logging
 import os
 import pwd
 
 
 class Scoreboard:
-    def __init__(self, scores, language='en_US'):
+    def __init__(self):
         """
         Constructor de la clase Scoreboard
         """
         user = self.get_player_username()
         self.user = user
-        self.scores = scores
-        self.language = language
+        self.language = locale.getdefaultlocale()[0]
+        self.scores = {}
 
     def __str__(self):
         """
@@ -55,15 +58,40 @@ class Scoreboard:
             else:  # Formato de fecha para cualquier otro idioma
                 date_format = '%A %d %B %Y'
             locale.setlocale(locale.LC_TIME, self.language)
-        except locale.Error:
-            pass
+        except locale.Error as error:
+            logging.error(f'Locale error occurred: {error}')
         return datetime.datetime.now().strftime(date_format)
 
-    def get_scores(self, user, scores):
-        pass
+    def get_scores(self):
+        """
+        Función que carga las puntuaciones desde el archivo JSON
+        """
+        try:
+            with open(f'{self.user}-scores.json', 'r') as file:
+                self.scores = json.load(file)
+        except FileNotFoundError as error:
+            self.scores = []
+            logging.error(f'File not found error: {error}')
 
-    def save_scores(self, user, scores):
-        pass
+    def save_scores(self):
+        """
+        Función que guarda las puntuaciones en el archivo JSON
+        """
+        with open(f'{self.user}-scores.json', 'w', encoding='UTF-8') as file:
+            json.dump(self.scores, file, ensure_ascii=False)
+
+    def add_score(self, score):
+        """
+        Función para añadir una nueva puntuación al scoreboard
+        """
+        try:
+            date = self.get_actual_date()
+            user_scores = self.scores.get(self.user, [])
+            user_scores.append((score, date))
+            self.scores[self.user] = user_scores
+            self.save_scores()
+        except Exception as error:
+            logging.error(f'Error while adding score: {error}')
 
 
 # Instanciamos el objeto de la clase Scoreboard
