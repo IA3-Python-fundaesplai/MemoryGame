@@ -2,7 +2,7 @@
 # Creado por Aitor
 # GitHub: https://www.github.com/aitorias
 # Fecha creación: 2023/09/22
-# Última actualización: 2023/09/23
+# Última actualización: 2023/09/29
 # Versión: 1.0
 
 import datetime
@@ -92,7 +92,3 @@ class Scoreboard:
             self.save_scores()
         except Exception as error:
             logging.error(f'Error while adding score: {error}')
-
-
-# Instanciamos el objeto de la clase Scoreboard
-scoreboard = Scoreboard()

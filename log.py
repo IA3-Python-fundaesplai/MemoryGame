@@ -1,8 +1,8 @@
-# Clase Log para guardar el registro de puntuaciones del usuario.
+# Clase Log para guardar registros de partidas de los usuarios
 # Creado por Aitor
 # GitHub: https://www.github.com/aitorias
 # Fecha creación: 2023/09/20
-# Última actualización: 2023/09/23
+# Última actualización: 2023/09/29
 # Versión: 1.0
 
 import datetime
@@ -79,8 +79,3 @@ class Log:
         Función para guardar los logs
         """
         logging.info(message)
-
-
-# Instanciamos el objeto de la clase Log
-log = Log()
-log.generate_file()
