@@ -52,7 +52,7 @@ class Log:
         """
         try:
             # Formatear la fecha para sistemas en inglés
-            if self.language in ['en_UK', 'en_US']:
+            if self.language in ['en_GB', 'en_US']:
                 date_format = '%A %d %B %Y'
             elif self.language == 'es_ES':  # Formatear la fecha para sistemas en español
                 date_format = '%A %d de %B de %Y'
