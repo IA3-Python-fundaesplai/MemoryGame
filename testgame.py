@@ -66,11 +66,14 @@ class Game(MemoryCards):
 
         print('MEMO GAME')
 
-        while current_round <= max_rounds:
-            user_turns = self.calculate_turns(num_cards)
-            cards = MemoryCards.shuffle_pairs(num_cards)
+        game_on = True
+
+        while game_on:
+            num_cards_round = num_cards + current_round - 1
+            user_turns = self.calculate_turns(num_cards_round)
+            cards = MemoryCards.shuffle_pairs(num_cards_round)
             print(cards)
-            time.sleep(3)
+            time.sleep(10)
             self.cls()
             for card in cards:
                 card.flipped = False
@@ -99,8 +102,8 @@ class Game(MemoryCards):
                 print(cards[card_choice2])
 
                 if MemoryCards.is_same_as(cards[card_choice1], cards[card_choice2]):
-                    self.calculate_score(user_turns, )
                     matched_pairs += 1
+                    user_score += 1
                     self.cls()
                     print(cards)
                     print("\n------------------------------------\nCorrecto\n------------------------------------\n")
@@ -112,6 +115,9 @@ class Game(MemoryCards):
                     print(cards)
                     print("\n------------------------------------\nIncorrecto\n------------------------------------\n")
 
+                if matched_pairs == num_cards // 2:
+                    current_round += 1
+                    break
                 user_turns -= 1
 
         self.scoreboard.add_score(matched_pairs)
