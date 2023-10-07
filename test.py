@@ -10,7 +10,7 @@ class App(ctk.CTk):
         # Setup principal
         super().__init__()
         self.title("Memory Game")
-        self.geometry("1250x900")
+        self.geometry("1250x850")
 
         container = ctk.CTkFrame(self)
         container.pack(side="top", fill="both", expand=True)
