@@ -2,7 +2,7 @@
 # Creado por Aitor
 # GitHub: https://www.github.com/aitorias
 # Fecha creación: 2023/09/29
-# Última actualización: 2023/09/30
+# Última actualización: 2023/10/07
 # Versión: 1.0
 
 from memory_cards import MemoryCards
@@ -10,6 +10,13 @@ from scoreboard import Scoreboard
 
 
 class Game(MemoryCards):
+    """
+    Clase que gestiona la lógica de un juego de tarjetas de memoria.
+
+    Atributos:
+        scoreboard (Scoreboard): Una instancia de la clase Scoreboard utilizada para gestionar las puntuaciones de los jugadores.
+    """
+
     def __init__(self):
         """
         Constructor de la clase Game
@@ -18,7 +25,13 @@ class Game(MemoryCards):
 
     def calculate_turns(self, number_of_cards):
         """
-        Método para calcular los turnos para completar una ronda
+        Calcula el número de turnos necesarios para completar una ronda en función del número de cartas.
+
+        Args:
+            number_of_cards (int): El número de cartas de la ronda.
+
+        Return:
+            int: El número de turnos necesarios para completar la ronda.
         """
         num_pairs = number_of_cards // 2
         minimum_turns = num_pairs + 2
@@ -27,24 +40,30 @@ class Game(MemoryCards):
 
     def calculate_score(self, turns_left, max_turns, max_score):
         """
-        Método para calcular la puntuación del usuario basada en los turnos restantes.
+        Calcula la puntuación del jugador en función de los turnos restantes.
+
+        Args:
+            turns_left (int): El número de turnos restantes.
+            max_turns (int): El número máximo de turnos permitidos.
+            max_score (int): La puntuación máxima posible.
+
+        Return:
+            int: La puntuación calculada.
         """
-        # Instanciamos una variable para calcular los turnos restantes del usuario
         turns_left = max(0, min(turns_left, max_turns))
-
-        # Calculamos al puntuación del usuario según los turnos
         score = max_score * (turns_left / max_turns)
-
-        # Retornamos la puntuación
         return round(score)
 
     def play_game(self, num_cards, max_rounds):
         """
-        Método para la lógica del juego de memoria
+        Gestiona la lógica del juego de cartas de memoria, incluyendo el número de rondas, turnos y puntuación.
+
+        Args:
+            num_cards (int): El número de cartas en el juego.
+            max_rondas (int): El número máximo de rondas a jugar.
         """
         current_round = 1
 
-        # Repetimos el juego por el máximo número de rondas seleccionadas
         while current_round <= max_rounds:
             num_cards_round = num_cards + current_round - 1
             cards = MemoryCards.shuffle_pairs(num_cards_round)
@@ -62,18 +81,13 @@ class Game(MemoryCards):
 
                 user_turns -= 1
 
-            # Si el jugador a acertado todas las parejas, pasa a la siguiente ronda
             if matched_pairs == num_cards_round // 2:
                 current_round += 1
-            # Si el jugador se queda sin turnos, pero ha acertado alguna pareja, guardamos su puntuación
             elif user_turns == 0 and matched_pairs > 0:
-                # Guardamos la puntuación del usuario
                 self.scoreboard.add_score(user_score)
                 break
-            # Si el jugador se ha quedado sin turnos y no ha acertado ni una sola pareja
             elif user_turns == 0 and matched_pairs == 0:
                 user_score = 0
-                # Guardamos la puntuación del usuario
                 self.scoreboard.add_score(user_score)
                 break
 
