@@ -48,6 +48,7 @@ class Card:
 
         self.suit = suit
         self.value = value
+        self.flipped = True
 
     def __repr__(self) -> str:
         """
@@ -56,7 +57,10 @@ class Card:
         Devuelve
             str: La representación en texto de la carta.
         """
-        return f'Carta: {self.value} de {self.suit}'
+        if self.flipped:
+            return f'Carta: {self.value} de {self.suit}'
+        else:
+            return "Card: [Flipped Down]"
 
     @classmethod
     def generate_all_cards(cls) -> List['Card']:
@@ -68,32 +72,9 @@ class Card:
         """
         return [cls(suit, value) for suit in cls.SUITS for value in cls.VALUES]
 
-    @classmethod
-    def shuffle_pairs(cls, number_of_cards: int) -> List['Card']:
+
+    def flip(self):
         """
-        Genera una lista de pares de cartas barajadas.
-
-        Args:
-            number_of_cards (int): El número de pares de cartas a generar.
-
-        Devuelve:
-            List['Card']: Una lista de pares de cartas barajadas.
+        Método para voltear la carta
         """
-        random_cards = []
-        all_suits = cls.SUITS
-        all_values = cls.VALUES
-
-        for _ in range(number_of_cards):
-            suit = random.choice(all_suits)
-            value = random.choice(all_values)
-            card1 = cls(suit, value)
-            card2 = cls(suit, value)
-            random_cards.extend([card1, card2])
-
-        random.shuffle(random_cards)
-
-        return random_cards
-
-
-card_1 = Card.shuffle_pairs(6)
-print(card_1)
+        self.flipped = not self.flipped

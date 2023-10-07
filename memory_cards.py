@@ -7,6 +7,9 @@
 
 import math
 import random
+from typing import List
+import copy
+
 # Importamos la clase Card
 from card import Card
 
@@ -24,26 +27,20 @@ class MemoryCards(Card):
         self.flipped = False
         self.matched = False
 
-    def __str__(self):
-        """
-        Override the __str__ method to show card state.
-        """
-        if self.flipped:
-            return super().__str__()
-        else:
-            return "Card: [Flipped Down]"
-
-    def flip(self):
+    def flip(self, card):
         """
         Método para voltear la carta
         """
         self.flipped = not self.flipped
 
-    def is_same_as(self, other_card):
+    # def flip_cards(cards_list):
+    #     return [card for card in cards_list]
+
+    def is_same_as(card, other_card):
         """
         Método para verificar si dos cartas son iguales
         """
-        return self.value == other_card.value and self.suit == other_card.suit
+        return card.value == other_card.value and card.suit == other_card.suit
 
     def is_matched(self):
         """
@@ -53,3 +50,27 @@ class MemoryCards(Card):
 
     def get_flipped_cards(random_memory_cards):
         return [card for card in random_memory_cards if card.flipped]
+
+    @classmethod
+    def shuffle_pairs(cls, number_of_cards: int) -> List["Card"]:
+        """
+        Genera una lista de pares de cartas barajadas.
+
+        Args:
+            number_of_cards (int): El número de pares de cartas a generar.
+
+        Devuelve:
+            List['Card']: Una lista de pares de cartas barajadas.
+        """
+        all_cards = Card.generate_all_cards()
+        random_cards = []
+
+        for _ in range(number_of_cards):
+            card_1 = random.choice(all_cards)
+            card_2 = copy.deepcopy(card_1)
+            random_cards.extend([card_1, card_2])
+
+        random.shuffle(random_cards)
+
+        return random_cards
+
