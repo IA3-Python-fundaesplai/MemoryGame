@@ -12,11 +12,13 @@ class Game(MemoryCards):
         scoreboard (Scoreboard): Una instancia de la clase Scoreboard utilizada para gestionar las puntuaciones de los jugadores.
     """
 
-    def __init__(self):
+    def __init__(self, num_cards):
         """
         Constructor de la clase Game
         """
         self.scoreboard = Scoreboard()
+        self.num_cards = num_cards
+        self.play_game(self.num_cards)
 
     def calculate_turns(self, number_of_cards):
         """
@@ -33,26 +35,23 @@ class Game(MemoryCards):
 
         return minimum_turns
 
-    def calculate_score(self, turns_left, max_turns, max_score):
+    def calculate_score(self, matched_pairs):
         """
         Calcula la puntuación del jugador en función de los turnos restantes.
 
         Args:
-            turns_left (int): El número de turnos restantes.
-            max_turns (int): El número máximo de turnos permitidos.
-            max_score (int): La puntuación máxima posible.
+            matched_pairs (int): El número de parejas acertadas.
 
         Return:
             int: La puntuación calculada.
         """
-        turns_left = max(0, min(turns_left, max_turns))
-        score = max_score * (turns_left / max_turns)
+        score = matched_pairs * 10
         return round(score)
 
     def cls(self):
         os.system("cls" if os.name == "nt" else "clear")
 
-    def play_game(self, num_cards, max_rounds):
+    def play_game(self, num_cards):
         """
         Gestiona la lógica del juego de cartas de memoria, incluyendo el número de rondas, turnos y puntuación.
 
@@ -61,6 +60,11 @@ class Game(MemoryCards):
             max_rondas (int): El número máximo de rondas a jugar.
         """
         current_round = 1
+        max_rounds = self.calculate_turns(self.num_cards)
+        user_score = 0
+        matched_pairs = 0
+
+        print('MEMO GAME')
 
         while current_round <= max_rounds:
             user_turns = self.calculate_turns(num_cards)
@@ -74,24 +78,44 @@ class Game(MemoryCards):
 
             while user_turns > 0:
                 card_choice1 = int(input("Elige una carta: ")) - 1
+                if cards[card_choice1].flipped:
+                    print('Ya has descubierto la carta')
+                    time.sleep(1)
+                    self.cls()
+                    print(cards)
+                    continue
                 cards[card_choice1].flip()
                 print(cards[card_choice1])
                 card_choice2 = int(input("Elige otra carta: ")) - 1
+
+                if cards[card_choice2].flipped:
+                    print('Ya has descubierto la carta')
+                    time.sleep(1)
+                    self.cls()
+                    cards[card_choice1].flip()
+                    print(cards)
+                    continue
                 cards[card_choice2].flip()
                 print(cards[card_choice2])
 
                 if MemoryCards.is_same_as(cards[card_choice1], cards[card_choice2]):
-                    print("Correcto")
+                    self.calculate_score(user_turns, )
+                    matched_pairs += 1
+                    self.cls()
                     print(cards)
+                    print("\n------------------------------------\nCorrecto\n------------------------------------\n")
 
                 else:
-                    print("Incorrecto")
+                    self.cls()
                     cards[card_choice1].flip()
                     cards[card_choice2].flip()
                     print(cards)
+                    print("\n------------------------------------\nIncorrecto\n------------------------------------\n")
 
                 user_turns -= 1
 
+        self.scoreboard.add_score(matched_pairs)
+        print('El juego ha finalizado.')
 
-game = Game()
-game.play_game(4, 4)
+
+game = Game(4)

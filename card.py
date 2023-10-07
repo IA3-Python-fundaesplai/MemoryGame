@@ -78,3 +78,4 @@ class Card:
         Método para voltear la carta
         """
         self.flipped = not self.flipped
+

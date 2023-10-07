@@ -2,7 +2,7 @@
 # Creado por Aitor
 # GitHub: https://www.github.com/aitorias
 # Fecha creación: 2023/09/29
-# Última actualización: 2023/10/03
+# Última actualización: 2023/10/07
 # Versión: 1.0
 
 import math
@@ -42,11 +42,11 @@ class MemoryCards(Card):
         """
         return card.value == other_card.value and card.suit == other_card.suit
 
-    def is_matched(self):
+    def is_matched(card):
         """
         Método para verificar si la carta ha sido emparejada
         """
-        return self.matched
+        return card.matched
 
     def get_flipped_cards(random_memory_cards):
         return [card for card in random_memory_cards if card.flipped]
@@ -73,4 +73,3 @@ class MemoryCards(Card):
         random.shuffle(random_cards)
 
         return random_cards
-
