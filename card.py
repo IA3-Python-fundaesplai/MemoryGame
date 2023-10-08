@@ -58,9 +58,9 @@ class Card:
             str: La representación en texto de la carta.
         """
         if self.flipped:
-            return f"|{self.value}{self.suit}|"
+            return f"| {self.value}{self.suit} |"
         else:
-            return "[<>]"
+            return "| <> |"
 
     def flip(self) -> None:
         """
