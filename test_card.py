@@ -1,11 +1,12 @@
-# Clase Card para definir, generar y controlar las cartas
-# Creado por Aitor
+# Clase TestCard para hacer test sobre la clase Card
+# Creado por: Aitor
 # GitHub: https://www.github.com/aitorias
 # Fecha creación: 2023/10/07
 # Última actualización: 2023/10/07
 # Versión: 1.0
 
 import unittest
+
 from card import Card
 
 
