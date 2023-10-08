@@ -6,7 +6,6 @@
 # Versión: 1.0
 
 from typing import List
-import random
 
 
 class Card:
@@ -18,12 +17,14 @@ class Card:
         VALUES (tuple): Una tupla que contiene los posibles valores de una carta.
         suit (str): El palo de la carta.
         value (str): El valor de la carta.
+        flipped (bool): Indica si la carta está boca arriba o boca abajo.
+
 
     Métodos:
         __init__(self, suit: str, value: str) -> None: Inicializa una carta con un palo y un valor dados.
         __repr__(self) -> str: Devuelve una representación de texto de una instancia de carta.
         generate_all_cards(cls) -> List['Card']: Genera una lista de todas las cartas posibles.
-        shuffle_pairs(cls, number_of_cards: int) -> List['Card']: Genera una lista de pares de cartas barajadas.
+        flip(self) -> None: Voltea la carta para cambiar su estado boca arriba o boca abajo.
     """
 
     SUITS = ("Corazones", "Diamantes", "Picas", "Tréboles")
@@ -58,9 +59,15 @@ class Card:
             str: La representación en texto de la carta.
         """
         if self.flipped:
-            return f'Carta: {self.value} de {self.suit}'
+            return f"Carta: {self.value} de {self.suit}"
         else:
-            return "Card: [Flipped Down]"
+            return "[ <> ]"
+        
+    def flip(self) -> None:
+        """
+        Voltea la carta para cambiar su estado boca arriba o boca abajo.
+        """
+        self.flipped = not self.flipped
 
     @classmethod
     def generate_all_cards(cls) -> List['Card']:
@@ -71,11 +78,4 @@ class Card:
             List['Card']: Una lista de todas las cartas posibles.
         """
         return [cls(suit, value) for suit in cls.SUITS for value in cls.VALUES]
-
-
-    def flip(self):
-        """
-        Método para voltear la carta
-        """
-        self.flipped = not self.flipped
 
