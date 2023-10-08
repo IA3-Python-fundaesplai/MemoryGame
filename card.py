@@ -27,9 +27,8 @@ class Card:
         flip(self) -> None: Voltea la carta para cambiar su estado boca arriba o boca abajo.
     """
 
-    SUITS = ("♥️", "♦️", "♠️", "♣️")
-    VALUES = ("2", "3", "4", "5", "6", "7", "8",
-              "9", "10", "J", "Q", "K", "A")
+    SUITS = ("♥️", "♦️", "♠", "♣️")
+    VALUES = ("2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A")
 
     def __init__(self, suit: str, value: str) -> None:
         """
@@ -62,7 +61,7 @@ class Card:
             return f"|{self.value}{self.suit}|"
         else:
             return "[<>]"
-        
+
     def flip(self) -> None:
         """
         Voltea la carta para cambiar su estado boca arriba o boca abajo.
@@ -70,7 +69,7 @@ class Card:
         self.flipped = not self.flipped
 
     @classmethod
-    def generate_all_cards(cls) -> List['Card']:
+    def generate_all_cards(cls) -> List["Card"]:
         """
         Genera una lista de todas las cartas posibles.
 
@@ -78,4 +77,3 @@ class Card:
             List['Card']: Una lista de todas las cartas posibles.
         """
         return [cls(suit, value) for suit in cls.SUITS for value in cls.VALUES]
-

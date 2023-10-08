@@ -7,6 +7,7 @@
 
 import os
 import time
+import art
 from memory_cards import MemoryCards
 from scoreboard import Scoreboard
 
@@ -20,7 +21,7 @@ class Game(MemoryCards):
         num_cards (int): El número de cartas en el juego.
     """
 
-    def __init__(self, num_cards):
+    def __init__(self):
         """
         Constructor de la clase Game.
 
@@ -28,7 +29,8 @@ class Game(MemoryCards):
             num_cards (int): El número de cartas en el juego.
         """
         self.scoreboard = Scoreboard()
-        self.num_cards = num_cards
+        self.num_cards = 8
+        self.card_pairs = self.num_cards // 2
         self.play_game(self.num_cards)
 
     def calculate_turns(self):
@@ -62,33 +64,34 @@ class Game(MemoryCards):
         matched_pairs = 0
         user_score = 0
 
-        print('MEMO GAME')
+        print(art.logo)
+        time.sleep(3)
+        self.cls()
 
         game_on = True
 
         while game_on:
-            num_cards_round = self.num_cards
-            cards = MemoryCards.shuffle_pairs(num_cards_round)
+            cards = MemoryCards.shuffle_pairs(self.card_pairs)
             user_turns = self.calculate_turns()
 
             print(cards)
             time.sleep(2)
             self.cls()
-            
+
             for card in cards:
                 card.flipped = False
             print(cards)
 
             while user_turns > 0:
                 if user_turns == 1:
-                    print(f'¡Te queda {user_turns} turno!')
+                    print(f"Ronda {current_round} ---------- ¡Te queda {user_turns} turno! ---------- Puntuación: {user_score}")
                 else:
-                    print(f'Tienes {user_turns} turnos')
+                    print(f"Ronda {current_round} ---------- Tienes {user_turns} turnos ---------- Puntuación: {user_score}")
 
                 card_choice1 = int(input("Elige una carta: ")) - 1
 
                 if cards[card_choice1].flipped:
-                    print('Ya has descubierto la carta')
+                    print("Ya has descubierto la carta")
                     time.sleep(1)
                     self.cls()
                     print(cards)
@@ -100,7 +103,7 @@ class Game(MemoryCards):
                 card_choice2 = int(input("Elige otra carta: ")) - 1
 
                 if cards[card_choice2].flipped:
-                    print('Ya has descubierto la carta')
+                    print("Ya has descubierto la carta")
                     time.sleep(1)
                     self.cls()
                     cards[card_choice1].flip()
@@ -116,29 +119,44 @@ class Game(MemoryCards):
                     user_score += 1
                     self.cls()
                     print(cards)
-                    print("\n------------------------------------\nCorrecto\n------------------------------------\n")
+                    print(
+                        "\n------------------------------------\nCorrecto\n------------------------------------\n"
+                    )
                 else:
                     self.cls()
                     cards[card_choice1].flip()
                     cards[card_choice2].flip()
                     print(cards)
-                    print("\n------------------------------------\nIncorrecto\n------------------------------------\n")
+                    print(
+                        "\n------------------------------------\nIncorrecto\n------------------------------------\n"
+                    )
 
-                if matched_pairs == num_cards:
+                if matched_pairs == self.card_pairs:
                     current_round += 1
-                    user_turns = 0
-                    continue
-                user_turns -= 1
-
-                if user_turns < 1 and matched_pairs < num_cards:
-                    print("\n------------------------------------\n¡Te has quedado sin turnos!\n------------------------------------\n")
-                    print(f"\n------------------------------------\nHas conseguido {matched_pairs} parejas\n------------------------------------\n")
+                    user_turns = self.calculate_turns()
+                    matched_pairs = 0
+                    self.cls()
+                    print(art.next_round)
                     time.sleep(3)
                     self.cls()
+                    break
+                user_turns -= 1
+
+                if user_turns == 0:
+                    print(
+                        "\n------------------------------------\n¡Te has quedado sin turnos!\n------------------------------------\n"
+                    )
+                    print(art.game_over)
+                    print(
+                        f"\n------------------------------------\nHas conseguido {matched_pairs} puntos\n------------------------------------\n"
+                    )
+                    time.sleep(3)
+                    self.cls()
+                    game_on = False
                     continue
 
         self.scoreboard.add_score(matched_pairs)
-        print('El juego ha finalizado.')
+        print("El juego ha finalizado.")
 
 
-game = Game(4)
+game = Game()
