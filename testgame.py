@@ -126,12 +126,16 @@ class Game(MemoryCards):
 
                 if matched_pairs == num_cards:
                     current_round += 1
-                    break
+                    user_turns = 0
+                    continue
                 user_turns -= 1
 
-            if user_turns == 0 and matched_pairs < num_cards // 2:
-                print("\n------------------------------------\n¡Te has quedado sin turnos!\n------------------------------------\n")
-                break
+                if user_turns < 1 and matched_pairs < num_cards:
+                    print("\n------------------------------------\n¡Te has quedado sin turnos!\n------------------------------------\n")
+                    print(f"\n------------------------------------\nHas conseguido {matched_pairs} parejas\n------------------------------------\n")
+                    time.sleep(3)
+                    self.cls()
+                    continue
 
         self.scoreboard.add_score(matched_pairs)
         print('El juego ha finalizado.')
