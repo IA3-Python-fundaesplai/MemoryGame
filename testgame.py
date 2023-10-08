@@ -100,6 +100,7 @@ class Game(MemoryCards):
                     continue
                 cards[card_choice2].flip()
                 print(cards[card_choice2])
+                time.sleep(1)
 
                 if MemoryCards.is_same_as(cards[card_choice1], cards[card_choice2]):
                     matched_pairs += 1

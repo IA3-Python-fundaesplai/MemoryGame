@@ -26,9 +26,9 @@ class Card:
         shuffle_pairs(cls, number_of_cards: int) -> List['Card']: Genera una lista de pares de cartas barajadas.
     """
 
-    SUITS = ("Corazones", "Diamantes", "Picas", "Tréboles")
+    SUITS = ("♥️", "♦️", "♠️", "♣️")
     VALUES = ("2", "3", "4", "5", "6", "7", "8",
-              "9", "10", "Jota", "Reina", "Rey", "As")
+              "9", "10", "J", "Q", "K", "A")
 
     def __init__(self, suit: str, value: str) -> None:
         """
@@ -58,9 +58,9 @@ class Card:
             str: La representación en texto de la carta.
         """
         if self.flipped:
-            return f'Carta: {self.value} de {self.suit}'
+            return f'|{self.value}{self.suit}|'
         else:
-            return "Card: [Flipped Down]"
+            return "[-]"
 
     @classmethod
     def generate_all_cards(cls) -> List['Card']:
