@@ -5,10 +5,9 @@
 # Última actualización: 2023/10/07
 # Versión: 1.0
 
-import math
+import copy
 import random
 from typing import List
-import copy
 
 # Importamos la clase Card
 from card import Card
@@ -16,59 +15,85 @@ from card import Card
 
 class MemoryCards(Card):
     """
-    Clase MemoryCards
+    Representa una carta con propieades y métodos para el juego de memorizar.
+    Hereda atributos y métodos de la clase Card.
+
+    Atributos:
+        matched (bool): Indica si la carta ha sido emparejada en el juego.
+
+    Métodos:
+        __init__(self, suit: str, value: str) -> None: Inicializa una carta con un palo y un valor dados.
+        is_same_as(card: 'MemoryCards', other_card: 'MemoryCards') -> bool: Comprueba si dos cartas son iguales.
+        is_matched(self) -> bool: Comprueba si la carta ha sido emparejada en el juego.
+        get_flipped_cards(random_memory_cards: List['MemoryCards']) -> List['MemoryCards']: Devuelve las cartas volteadas.
+        shuffle_pairs(cls, number_of_pairs: int) -> List['MemoryCards']: Baraja pares de cartas para el juego de memoria.
     """
 
-    def __init__(self, suit, value):
+    def __init__(self, suit: str, value: str):
         """
-        Constructor de la clase MemoryCards
+        Inicializa una carta con un palo y un valor.
+        Establece el atributo coincidente en False.
+
+        Args:
+            suit (str): El palo de la carta.
+            value (str): El valor de la carta.
         """
         super().__init__(suit, value)
-        self.flipped = False
         self.matched = False
 
-    def flip(self, card):
-        """
-        Método para voltear la carta
-        """
-        self.flipped = not self.flipped
 
-    # def flip_cards(cards_list):
-    #     return [card for card in cards_list]
-
-    def is_same_as(card, other_card):
+    @staticmethod
+    def is_same_as(card: 'MemoryCards', other_card: 'MemoryCards') -> bool:
         """
-        Método para verificar si dos cartas son iguales
+        Comprueba si dos cartas son iguales comparando sus valores y palos.
+
+        Args:
+            card (MemoryCards): La primera carta.
+            other_card (MemoryCards): La segunda carta.
+
+        Devuelve:
+            bool: True si las cartas son iguales, False en caso contrario.
         """
         return card.value == other_card.value and card.suit == other_card.suit
 
-    def is_matched(card):
+    def is_matched(self) -> bool:
         """
-        Método para verificar si la carta ha sido emparejada
-        """
-        return card.matched
+        Comprueba si la carta coincide comprobando el atributo matched.
 
-    def get_flipped_cards(random_memory_cards):
+        Devuelve:
+            bool: True si la carta coincide, False en caso contrario.
+        """
+        return self.matched
+
+    @staticmethod
+    def get_flipped_cards(random_memory_cards: List['MemoryCards']) -> List['MemoryCards']:
+        """
+        Devuelve una lista de cartas volteadas a partir de una lista de cartas aleatoria.
+
+        Args:
+            random_memory_cards (Lista['MemoryCards']): La lista de cartas aleatorias.
+
+        Devuelve:
+            List['MemoryCards']: La lista de cartas aleatorias.
+        """
         return [card for card in random_memory_cards if card.flipped]
 
     @classmethod
-    def shuffle_pairs(cls, number_of_cards: int) -> List["Card"]:
+    def shuffle_pairs(cls, number_of_pairs: int) -> List['MemoryCards']:
         """
-        Genera una lista de pares de cartas barajadas.
+        Método de clase que baraja pares de cartas.
+        Genera una lista de pares de cartas seleccionando aleatoriamente cartas de entre todas las posibles y luego barajando la lista.
 
         Args:
-            number_of_cards (int): El número de pares de cartas a generar.
+            number_of_pairs (int): El número de pares de cartas a generar.
 
         Devuelve:
-            List['Card']: Una lista de pares de cartas barajadas.
+            List['MemoryCards']: Una lista de pares de cartas barajadas.
         """
-        all_cards = Card.generate_all_cards()
-        random_cards = []
-
-        for _ in range(number_of_cards):
-            card_1 = random.choice(all_cards)
-            card_2 = copy.deepcopy(card_1)
-            random_cards.extend([card_1, card_2])
+        all_cards = cls.generate_all_cards()
+        random_pairs = random.sample(all_cards, number_of_pairs)
+        
+        random_cards = [copy.deepcopy(card) for card in random_pairs] + [copy.deepcopy(card) for card in random_pairs]
 
         random.shuffle(random_cards)
 
