@@ -1,5 +1,5 @@
 # Clase Card para definir, generar y controlar las cartas
-# Creado por Aitor
+# Creado por: Aitor
 # GitHub: https://www.github.com/aitorias
 # Fecha creación: 2023/09/29
 # Última actualización: 2023/10/07
@@ -23,8 +23,8 @@ class Card:
     Métodos:
         __init__(self, suit: str, value: str) -> None: Inicializa una carta con un palo y un valor dados.
         __repr__(self) -> str: Devuelve una representación de texto de una instancia de carta.
-        generate_all_cards(cls) -> List['Card']: Genera una lista de todas las cartas posibles.
         flip(self) -> None: Voltea la carta para cambiar su estado boca arriba o boca abajo.
+        generate_all_cards(cls) -> List['Card']: Genera una lista de todas las cartas posibles.
     """
 
     SUITS = ("♥️", "♦️", "♠", "♣️")
@@ -38,7 +38,7 @@ class Card:
             suit (str): El palo de la carta.
             value (str): El valor de la carta.
 
-        Se produce:
+        Raises:
             ValueError: Si el palo o el valor no son válidos.
         """
         if suit not in self.SUITS:
@@ -54,11 +54,11 @@ class Card:
         """
         Devuelve una representación de texto de una instancia de carta.
 
-        Devuelve
+        Returns:
             str: La representación en texto de la carta.
         """
         if self.flipped:
-            return f"| {self.value}{self.suit} |"
+            return f"| {self.value} {self.suit} |"
         else:
             return "| <> |"
 
@@ -69,11 +69,11 @@ class Card:
         self.flipped = not self.flipped
 
     @classmethod
-    def generate_all_cards(cls) -> List["Card"]:
+    def generate_all_cards(cls) -> List['Card']:
         """
         Genera una lista de todas las cartas posibles.
 
-        Devuelve:
+        Returns:
             List['Card']: Una lista de todas las cartas posibles.
         """
         return [cls(suit, value) for suit in cls.SUITS for value in cls.VALUES]

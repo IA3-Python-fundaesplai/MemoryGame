@@ -1,13 +1,16 @@
-# Clase MemoryCards para definir, generar y controlar las cartas
-# Creado por Aitor & Jon
+# Clase Game para gestionar la lógica del juego
+# Creado por: Aitor & Jon
 # GitHub: https://www.github.com/aitorias | https://www.github.com/jonfdz
 # Fecha creación: 2023/09/29
 # Última actualización: 2023/10/08
 # Versión: 1.0
 
-import os
-import time
 import art
+import os
+import sqlite3
+import time
+
+
 from memory_cards import MemoryCards
 from scoreboard import Scoreboard
 
@@ -21,7 +24,7 @@ class Game(MemoryCards):
         num_cards (int): El número de cartas en el juego.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Constructor de la clase Game.
 
@@ -31,16 +34,17 @@ class Game(MemoryCards):
         self.scoreboard = Scoreboard()
         self.num_cards = 8
         self.card_pairs = self.num_cards // 2
+
+        self.conn = sqlite3.connect("scores.db")
+        self.cursor = self.conn.cursor()
+
         self.play_game()
 
-    def calculate_turns(self):
+    def calculate_turns(self) -> int:
         """
         Calcula el número de turnos necesarios para completar una ronda en función del número de cartas.
 
-        Args:
-            number_of_cards (int): El número de cartas de la ronda.
-
-        Return:
+        Returns:
             int: El número de turnos necesarios para completar la ronda.
         """
         total_turns = self.card_pairs * 2 + 2
@@ -52,12 +56,9 @@ class Game(MemoryCards):
         """
         os.system("cls" if os.name == "nt" else "clear")
 
-    def play_game(self):
+    def play_game(self) -> None:
         """
         Gestiona la lógica del juego de cartas de memoria, incluyendo el número de rondas, turnos y puntuación.
-
-        Args:
-            num_cards (int): El número de cartas en el juego.
         """
         current_round = 1
         matched_pairs = 0

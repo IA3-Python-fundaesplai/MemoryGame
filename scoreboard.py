@@ -1,20 +1,39 @@
 # Clase Scoreboard para guardar el registro de puntuaciones del usuario.
-# Creado por Aitor
+# Creado por: Aitor
 # GitHub: https://www.github.com/aitorias
 # Fecha creación: 2023/09/22
-# Última actualización: 2023/09/29
+# Última actualización: 2023/10/08
 # Versión: 1.0
 
 import datetime
-import json
 import locale
 import logging
 import os
 import pwd
+import sqlite3
+
+from database import Database 
 
 
 class Scoreboard:
-    def __init__(self):
+    """
+    Clase para gestionar el registro de puntuaciones de los usuarios en un juego.
+
+    Attributes:
+        user (str): El nombre de usuario del jugador.
+        language (str): El idioma del sistema.
+        scores (dict): Un diccionario que almacena las puntuaciones del jugador.
+
+    Methods:
+        __init__: Constructor de la clase.
+        __del__: Destructor de la clase.
+        __str__: Devuelve una representación en cadena de la instancia.
+        get_player_username: Obtiene el nombre de usuario del sistema.
+        get_actual_date: Obtiene la fecha actual formateada según el idioma del sistema.
+        get_scores: Carga las puntuaciones del jugador desde la base de datos.
+        add_score: Añade una nueva puntuación al registro del jugador.
+    """
+    def __init__(self, db_name='scores.db') -> None:
         """
         Constructor de la clase Scoreboard
         """
@@ -23,16 +42,17 @@ class Scoreboard:
         self.language = locale.getdefaultlocale()[0]
         self.scores = {}
 
-    def __str__(self):
+        self.db_name = db_name
+
+    def __str__(self) -> str:
         """
         Representación de una instancia de la clase Scoreboard
         """
         return f'Jugador: {self.user} | Puntuaciones: {self.scores}'
 
-    def get_player_username(self):
+    def get_player_username(self) -> str:
         """
-        Función que retorna el nombre de usuario de inicio de sesión del sistema 
-        para utilizarlo como username del juego.
+        Obtiene el nombre de usuario de inicio de sesión del sistema para utilizarlo como nombre de usuario del juego.
         """
         # Obtenemos el usuario del sistema
         try:
@@ -45,9 +65,9 @@ class Scoreboard:
             username = pwd.getpwuid(os.getuid()).pw_name
         return f'{username}'
 
-    def get_actual_date(self):
+    def get_actual_date(self) -> str:
         """
-        Función que retorna la fecha actual formatada según el idioma del sistema
+        Obtiene la fecha actual formateada según el idioma del sistema.
         """
         try:
             # Formatear la fecha para sistemas en inglés
@@ -62,33 +82,31 @@ class Scoreboard:
             logging.error(f'Locale error occurred: {error}')
         return datetime.datetime.now().strftime(date_format)
 
-    def get_scores(self):
+    def get_scores(self) -> list:
         """
-        Función que carga las puntuaciones desde el archivo JSON
+        Carga las puntuaciones del jugador desde la base de datos.
         """
         try:
-            with open(f'{self.user}-scores.json', 'r') as file:
-                self.scores = json.load(file)
-        except FileNotFoundError as error:
-            self.scores = []
-            logging.error(f'File not found error: {error}')
+            with Database(self.db_name) as db:
+                db.execute_query('''
+                    SELECT username, score, date
+                    FROM scores
+                    WHERE username = ?
+                ''', (self.user,))
+                self.scores = db.fetch_all('SELECT username, score, date FROM scores WHERE username = ?', (self.user,))
+        except Exception as error:
+            logging.error(f'Error al recibir las puntuaciones de la base de datos: {error}')
 
-    def save_scores(self):
+    def add_score(self, score: int) -> None:
         """
-        Función que guarda las puntuaciones en el archivo JSON
-        """
-        with open(f'{self.user}-scores.json', 'w', encoding='UTF-8') as file:
-            json.dump(self.scores, file, ensure_ascii=False)
-
-    def add_score(self, score):
-        """
-        Función para añadir una nueva puntuación al scoreboard
+        Añade una nueva puntuación al registro del jugador.
         """
         try:
             date = self.get_actual_date()
-            user_scores = self.scores.get(self.user, [])
-            user_scores.append((score, date))
-            self.scores[self.user] = user_scores
-            self.save_scores()
+            with Database(self.db_name) as db:
+                db.execute_query('''
+                    INSERT INTO scores (username, score, date)
+                    VALUES (?, ?, ?)
+                ''', (self.user, score, date))
         except Exception as error:
             logging.error(f'Error while adding score: {error}')
