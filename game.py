@@ -60,40 +60,51 @@ class Game(MemoryCards):
         """
         Gestiona la lógica del juego de cartas de memoria, incluyendo el número de rondas, turnos y puntuación.
         """
+        # Variables del juego:
         current_round = 1
         matched_pairs = 0
         user_score = 0
 
+        # Print del mensaje de bienvenida al juego:
         print(art.logo)
         time.sleep(3)
         self.cls()
 
+        # Comienzo del juego:
         game_on = True
 
         while game_on:
+
+            # Establecemos el numero de parejas y el numero de turnos por ronda:
             cards = MemoryCards.shuffle_pairs(self.card_pairs)
             user_turns = self.calculate_turns()
 
+            # Comienza la fase de memorización:
             print(cards)
             print(
-                        "\n------------------------------------\nMEMORIZA LAS PAREJAS\n------------------------------------\n"
-                    )
+                "\n------------------------------------\nMEMORIZA LAS PAREJAS\n------------------------------------\n"
+            )
             time.sleep(2)
             self.cls()
 
+            # Escondemos los valores de las cartas:
             for card in cards:
                 card.flipped = False
             print(cards)
             print(
-                        "\n------------------------------------\nConseguirás puntos segun tus turnos\n------------------------------------\n"
-                    )
+                "\n------------------------------------\nConseguirás puntos segun tus turnos\n------------------------------------\n"
+            )
 
+            # Comienzan los turnos del jugador:
             while user_turns > 0:
                 if user_turns == 1:
-                    print(f"Ronda {current_round} ---------- ¡Te queda {user_turns} turno! ---------- Puntuación: {user_score}")
+                    print(
+                        f"Ronda {current_round} ---------- ¡Te queda {user_turns} turno! ---------- Puntuación: {user_score}")
                 else:
-                    print(f"Ronda {current_round} ---------- Tienes {user_turns} turnos ---------- Puntuación: {user_score}")
+                    print(
+                        f"Ronda {current_round} ---------- Tienes {user_turns} turnos ---------- Puntuación: {user_score}")
 
+            # Fase de elección de cartas:
                 card_choice1 = int(input("Elige una carta: ")) - 1
 
                 if cards[card_choice1].flipped:
@@ -120,6 +131,7 @@ class Game(MemoryCards):
                 print(cards[card_choice2])
                 time.sleep(1)
 
+            # Comprobación de si la pareja elegida es correcta:
                 if MemoryCards.is_same_as(cards[card_choice1], cards[card_choice2]):
                     matched_pairs += 1
                     user_score += user_turns
@@ -137,8 +149,8 @@ class Game(MemoryCards):
                         "\n------------------------------------\nIncorrecto\n------------------------------------\n"
                     )
 
+            # Comprobación de si el jugador ha encontrado todas las parejas para pasar de ronda:
                 if matched_pairs == self.card_pairs:
-                    # user_turns = self.calculate_turns() - current_round
                     current_round += 1
                     matched_pairs = 0
                     self.cls()
@@ -148,6 +160,7 @@ class Game(MemoryCards):
                     break
                 user_turns -= 1
 
+            # Comprobación de si el jugador se ha quedado sin turnos para acabar el juego:
                 if user_turns == 0:
                     self.cls()
                     print(
@@ -162,6 +175,7 @@ class Game(MemoryCards):
                     game_on = False
                     continue
 
+        # Guardado de puntuación y mensaje final:
         self.scoreboard.add_score(user_score)
         print("El juego ha finalizado.")
 
