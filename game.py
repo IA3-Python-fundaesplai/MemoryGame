@@ -175,3 +175,4 @@ class Game(MemoryCards):
 
         self.scoreboard.add_score(user_score)
         print("El juego ha finalizado.")
+        time.sleep(3)
