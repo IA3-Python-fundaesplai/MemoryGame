@@ -5,9 +5,9 @@
 # Última actualización: 2023/10/08
 # Versión: 1.0
 
+import art
 import os
 import time
-import art
 
 # Improtamos las clases MemoryCards y Scoreboard
 from memory_cards import MemoryCards
@@ -105,6 +105,7 @@ class Game(MemoryCards):
                         f"Ronda {current_round} ---------- Tienes {user_turns} turnos ---------- Puntuación: {user_score}"
                     )
 
+                # Elección de la primera carta
                 card_choice1 = int(input("Elige una carta: ")) - 1
 
                 if cards[card_choice1].flipped:
@@ -118,6 +119,7 @@ class Game(MemoryCards):
                 cards[card_choice1].flip()
                 print(cards[card_choice1])
 
+                # Elección de la segunda carta
                 card_choice2 = int(input("Elige otra carta: ")) - 1
 
                 if cards[card_choice2].flipped:
@@ -133,6 +135,7 @@ class Game(MemoryCards):
                 print(cards[card_choice2])
                 time.sleep(1)
 
+                # Comprobación de si la pareja es correcta o incorrecta
                 if MemoryCards.is_same_as(cards[card_choice1], cards[card_choice2]):
                     matched_pairs += 1
                     user_score += user_turns
@@ -150,6 +153,7 @@ class Game(MemoryCards):
                         "\n------------------------------------\nIncorrecto\n------------------------------------\n"
                     )
 
+                # Comprobación de si el jugador ha encontrado todas las parejas para pasar de ronda
                 if matched_pairs == self.card_pairs:
                     # user_turns = self.calculate_turns() - current_round
                     current_round += 1
@@ -161,6 +165,7 @@ class Game(MemoryCards):
                     break
                 user_turns -= 1
 
+                # Comprueba si se han acabado los turnos para terminar el juego
                 if user_turns == 0:
                     self.cls()
                     print(
@@ -175,6 +180,7 @@ class Game(MemoryCards):
                     game_on = False
                     continue
 
+        # Guarda la puntuacion y vuelve al menu
         self.scoreboard.add_score(user_score)
         print("El juego ha finalizado.")
         time.sleep(3)

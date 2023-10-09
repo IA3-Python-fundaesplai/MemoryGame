@@ -25,8 +25,7 @@ class Scoreboard:
         self.language = locale.getdefaultlocale()[0]
         self.scores = {}
 
-        self.log = Log(
-            user=self.user, log_file=f'{self.user}-log.log')
+        self.log = Log(user=self.user, log_file=f'{self.user}-log.log')
 
     def __str__(self):
         """
@@ -66,7 +65,7 @@ class Scoreboard:
                 date_format = "%A %d %B %Y"
             locale.setlocale(locale.LC_TIME, self.language)
         except locale.Error as error:
-            logging.error(f"Locale error occurred: {error}")
+            self.log.log_error(f"Locale error occurred: {error}")
         return datetime.datetime.now().strftime(date_format)
 
     def get_scores(self):
@@ -82,7 +81,7 @@ class Scoreboard:
             scores = {}
         except json.decoder.JSONDecodeError as error:
             scores = {}
-            logging.error(
+            self.log.log_error(
                 f"File not found error: creating file. Error: {error}")
         return scores
 
@@ -128,15 +127,16 @@ class Scoreboard:
 
             for key in scores.items():
                 username = key[0]
-                score, date = max(key[1])
+                score, date = reduce(
+                    lambda a, b: a if a[0] > b[0] else b, key[1])
                 parsed_scores.append([username, score, date])
 
-            parsed_scores.sort(reverse=True)
+            parsed_scores.sort(key=lambda x: x[1], reverse=True)
 
             for user in parsed_scores:
                 print(
-                    f"{count}.- {user[0]} consiguio {user[1]} puntos el {user[2]}")
+                    f"{count}.- {user[0]}: {user[1]} puntos el {user[2]}")
                 count += 1
 
-            quit = input("Pulse enter para volver al menu.")
+            quit = input("Pulsa enter para volver al menú.")
             break
