@@ -9,7 +9,6 @@ import art
 import datetime
 import json
 import locale
-import os
 from functools import reduce
 
 from log import Log
@@ -20,33 +19,17 @@ class Scoreboard:
         """
         Constructor de la clase Scoreboard
         """
-        self.user = self.get_player_username()
+        self.user = "player_1"
         self.language = locale.getdefaultlocale()[0]
         self.scores = {}
 
-        self.log = Log(user=self.user, log_file=f'{self.user}-log.log')
+        self.log = Log(log_file=f'{self.user}-log.log')
 
     def __str__(self):
         """
         Representación de una instancia de la clase Scoreboard
         """
         return f"Jugador: {self.user} | Puntuaciones: {self.scores}"
-
-    def get_player_username(self):
-        """
-        Función que retorna el nombre de usuario de inicio de sesión del sistema
-        para utilizarlo como username del juego.
-        """
-        # Obtenemos el usuario del sistema
-        try:
-            username = os.getlogin()
-        except OSError:
-            """
-            Si se usa una máquina virtual o WSL en Windows, os.getlogin() da error.
-            Para ello, usamos el módulo de Python pwd para obtener el nombre del usuario de la máquina.
-            """
-            username = input("Introduzca su nombre: ")
-        return f"{username}"
 
     def get_actual_date(self):
         """

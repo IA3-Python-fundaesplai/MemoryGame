@@ -8,11 +8,12 @@
 import datetime
 import locale
 import logging
+import os
 
 
 class Log:
-    def __init__(self, user, log_file='log.log', log_level=logging.INFO):
-        self.user = user
+    def __init__(self, log_file='log.log', log_level=logging.INFO):
+        self.user = self.get_player_loggin()
         self.language = locale.getdefaultlocale()[0]
         self.log_file = log_file
 
@@ -35,6 +36,22 @@ class Log:
         except locale.Error as error:
             logging.error(f'Locale error occurred: {error}')
         return datetime.datetime.now().strftime(date_format)
+
+    def get_player_loggin(self):
+        """
+        Función que retorna el nombre de usuario de inicio de sesión del sistema
+        para utilizarlo como username del juego.
+        """
+        # Obtenemos el usuario del sistema
+        try:
+            username = os.getlogin()
+        except OSError:
+            """
+            Si se usa una máquina virtual o WSL en Windows, os.getlogin() da error.
+            Para ello, usamos el módulo de Python pwd para obtener el nombre del usuario de la máquina.
+            """
+            username = "root"
+        return f"{username}"
 
     def generate_file(self):
         """
