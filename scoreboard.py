@@ -10,7 +10,6 @@ import json
 import locale
 import logging
 import os
-import pwd
 
 
 class Scoreboard:
@@ -42,7 +41,7 @@ class Scoreboard:
             Si se usa una máquina virtual o WSL en Windows, os.getlogin() da error.
             Para ello, usamos el módulo de Python pwd para obtener el nombre del usuario de la máquina.
             '''
-            username = pwd.getpwuid(os.getuid()).pw_name
+            username = input("Introduzca su nombre: ")
         return f'{username}'
 
     def get_actual_date(self):
