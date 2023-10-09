@@ -69,14 +69,15 @@ class Game(MemoryCards):
         Args:
             num_cards (int): El número de cartas en el juego.
         """
+        # Variables del juego
         current_round = 1
-        matched_pairs = 0
         user_score = 0
 
         self.cls()
 
         game_on = True
 
+        # Comienza el juego
         while game_on:
             cards = MemoryCards.shuffle_pairs(self.card_pairs)
             user_turns = self.calculate_turns()
@@ -94,7 +95,7 @@ class Game(MemoryCards):
             print(
                 "\n------------------------------------\nConseguirás puntos segun tus turnos\n------------------------------------\n"
             )
-
+            # Comienzo de los turnos del jugador
             while user_turns > 0:
                 if user_turns == 1:
                     print(
@@ -104,8 +105,7 @@ class Game(MemoryCards):
                     print(
                         f"Ronda {current_round} ---------- Tienes {user_turns} turnos ---------- Puntuación: {user_score}"
                     )
-
-                # Elección de la primera carta
+                # Eleccion de la primera carta
                 card_choice1 = int(input("Elige una carta: ")) - 1
 
                 if cards[card_choice1].flipped:
@@ -118,8 +118,7 @@ class Game(MemoryCards):
 
                 cards[card_choice1].flip()
                 print(cards[card_choice1])
-
-                # Elección de la segunda carta
+                # Eleccion de la segunda carta
                 card_choice2 = int(input("Elige otra carta: ")) - 1
 
                 if cards[card_choice2].flipped:
@@ -134,10 +133,8 @@ class Game(MemoryCards):
                 cards[card_choice2].flip()
                 print(cards[card_choice2])
                 time.sleep(1)
-
-                # Comprobación de si la pareja es correcta o incorrecta
+                # Comproacion de si la pareja es correcta o incorrecta
                 if MemoryCards.is_same_as(cards[card_choice1], cards[card_choice2]):
-                    matched_pairs += 1
                     user_score += user_turns
                     self.cls()
                     self.print_cards(cards)
@@ -152,34 +149,26 @@ class Game(MemoryCards):
                     print(
                         "\n------------------------------------\nIncorrecto\n------------------------------------\n"
                     )
-
-                # Comprobación de si el jugador ha encontrado todas las parejas para pasar de ronda
-                if matched_pairs == self.card_pairs:
-                    # user_turns = self.calculate_turns() - current_round
+                # Comprobacion de si el jugador ha encontrado todas las parejas para pasar de ronda
+                if self.num_cards == len(list(filter(lambda x: x.flipped, cards))):
                     current_round += 1
-                    matched_pairs = 0
                     self.cls()
                     print(art.next_round)
                     time.sleep(3)
                     self.cls()
                     break
                 user_turns -= 1
-
                 # Comprueba si se han acabado los turnos para terminar el juego
                 if user_turns == 0:
                     self.cls()
-                    print(
-                        "\n------------------------------------\n¡Te has quedado sin turnos!\n------------------------------------\n"
-                    )
                     print(art.game_over)
                     print(
-                        f"\n------------------------------------\nHas conseguido {user_score} puntos\n------------------------------------\n"
+                        f"\n----------------------------------------\n¡Te has quedado sin turnos! Has conseguido {user_score} puntos\n----------------------------------------\n"
                     )
                     time.sleep(3)
                     self.cls()
                     game_on = False
                     continue
-
         # Guarda la puntuacion y vuelve al menu
         self.scoreboard.add_score(user_score)
         print("El juego ha finalizado.")

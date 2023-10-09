@@ -9,7 +9,6 @@ import art
 import datetime
 import json
 import locale
-import logging
 import os
 from functools import reduce
 
@@ -70,7 +69,7 @@ class Scoreboard:
 
     def get_scores(self):
         """
-        Función que carga las puntuaciones desde el archivo JSON
+        Función que carga las puntuaciones desde el archivo JSON y si no existe lo crea
         """
         try:
             with open("scores.json", "r") as file:
@@ -97,7 +96,6 @@ class Scoreboard:
         Función para añadir una nueva puntuación al scoreboard
         """
         date = self.get_actual_date()
-
         self.user = input("Introduzca su nombre: ").upper()
         self.scores = self.get_scores()
 
@@ -111,9 +109,14 @@ class Scoreboard:
         log_message = f'Puntuación {score} para el jugador {self.user} en {date} añadida correctamente.'
         self.log.log_info(log_message)
 
+    def parse_list(self, item):
+        username = item[0]
+        score, date = reduce(lambda a, b: a if a[0] > b[0] else b, item[1])
+        return [username, score, date]
+
     def print_scoreboard(self):
         """
-        Funcion para printear la clasificacion en pantalla
+        Funcion para printear la clasificacion ordenada en pantalla
         """
         quit = ""
 
@@ -125,18 +128,14 @@ class Scoreboard:
             parsed_scores = []
             count = 1
 
-            for key in scores.items():
-                username = key[0]
-                score, date = reduce(
-                    lambda a, b: a if a[0] > b[0] else b, key[1])
-                parsed_scores.append([username, score, date])
+            parsed_scores = list(map(self.parse_list, scores.items()))
 
             parsed_scores.sort(key=lambda x: x[1], reverse=True)
 
             for user in parsed_scores:
                 print(
-                    f"{count}.- {user[0]}: {user[1]} puntos el {user[2]}")
+                    f"{count}.- {user[0]} consiguio {user[1]} puntos el {user[2]}")
                 count += 1
 
-            quit = input("Pulsa enter para volver al menú.")
+            quit = input("\nPulse enter para volver al menu.")
             break
