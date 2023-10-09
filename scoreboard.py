@@ -67,7 +67,7 @@ class Scoreboard:
 
     def get_scores(self):
         """
-        Función que carga las puntuaciones desde el archivo JSON
+        Función que carga las puntuaciones desde el archivo JSON y si no existe lo crea
         """
         try:
             with open("scores.json", "r") as file:
@@ -119,7 +119,7 @@ class Scoreboard:
                 score, date = max(key[1])
                 parsed_scores.append([username, score, date])
 
-            parsed_scores.sort(reverse=True)
+            parsed_scores.sort(key=lambda x: x[1] ,reverse=True)
 
             for user in parsed_scores:
                 print(f"{count}.- {user[0]} consiguio {user[1]} puntos el {user[2]}")
