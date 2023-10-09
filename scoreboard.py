@@ -5,6 +5,7 @@
 # Última actualización: 2023/10/09
 # Versión: 1.0
 
+from functools import reduce
 import datetime
 import json
 import locale
@@ -18,8 +19,8 @@ class Scoreboard:
         """
         Constructor de la clase Scoreboard
         """
-        user = self.get_player_username()
-        self.user = user
+        user_loggin = self.get_player_loggin()
+        self.user = ""
         self.language = locale.getdefaultlocale()[0]
         self.scores = {}
 
@@ -27,23 +28,23 @@ class Scoreboard:
         """
         Representación de una instancia de la clase Scoreboard
         """
-        return f'Jugador: {self.user} | Puntuaciones: {self.scores}'
+        return f"Jugador: {self.user} | Puntuaciones: {self.scores}"
 
-    def get_player_username(self):
+    def get_player_loggin(self):
         """
-        Función que retorna el nombre de usuario de inicio de sesión del sistema 
+        Función que retorna el nombre de usuario de inicio de sesión del sistema
         para utilizarlo como username del juego.
         """
         # Obtenemos el usuario del sistema
         try:
-            username = os.getlogin()
+            username_loggin = os.getlogin()
         except OSError:
-            '''
+            """
             Si se usa una máquina virtual o WSL en Windows, os.getlogin() da error.
             Para ello, usamos el módulo de Python pwd para obtener el nombre del usuario de la máquina.
-            '''
-            username = input("Introduzca su nombre: ")
-        return f'{username}'
+            """
+            username_loggin = input("Introduzca su nombre: ")
+        return f"{username_loggin}"
 
     def get_actual_date(self):
         """
@@ -51,15 +52,17 @@ class Scoreboard:
         """
         try:
             # Formatear la fecha para sistemas en inglés
-            if self.language in ['en_GB', 'en_US']:
-                date_format = '%A %d %B %Y'
-            elif self.language == 'es_ES':  # Formatear la fecha para sistemas en español
-                date_format = '%A %d de %B de %Y'
+            if self.language in ["en_GB", "en_US"]:
+                date_format = "%A %d %B %Y"
+            elif (
+                self.language == "es_ES"
+            ):  # Formatear la fecha para sistemas en español
+                date_format = "%A %d de %B de %Y"
             else:  # Formato de fecha para cualquier otro idioma
-                date_format = '%A %d %B %Y'
+                date_format = "%A %d %B %Y"
             locale.setlocale(locale.LC_TIME, self.language)
         except locale.Error as error:
-            logging.error(f'Locale error occurred: {error}')
+            logging.error(f"Locale error occurred: {error}")
         return datetime.datetime.now().strftime(date_format)
 
     def get_scores(self):
@@ -67,32 +70,35 @@ class Scoreboard:
         Función que carga las puntuaciones desde el archivo JSON
         """
         try:
-            with open(f'{self.user}-scores.json', 'r') as file:
-                self.scores = json.load(file)
-        except FileNotFoundError as error:
-            self.scores = []
-            logging.error(f'File not found error: {error}')
-        return self.scores
+            with open("scores.json", "r") as file:
+                scores = json.load(file)
+        except json.decoder.JSONDecodeError as error:
+            scores = {}
+            logging.error(f"File not found error: creating file.")
+        return scores
 
     def save_scores(self):
         """
         Función que guarda las puntuaciones en el archivo JSON
         """
-        with open(f'{self.user}-scores.json', 'w', encoding='UTF-8') as file:
+        with open("scores.json", "w", encoding="UTF-8") as file:
             json.dump(self.scores, file, ensure_ascii=False)
 
     def add_score(self, score):
         """
         Función para añadir una nueva puntuación al scoreboard
         """
-        try:
-            date = self.get_actual_date()
-            user_scores = self.scores.get(self.user, [])
-            user_scores.append((score, date))
-            self.scores[self.user] = user_scores
-            self.save_scores()
-        except Exception as error:
-            logging.error(f'Error while adding score: {error}')
+        # try:
+        date = self.get_actual_date()
+        self.user = input("Introduzca su nombre: ").upper()
+        self.scores = self.get_scores()
+        if self.user in self.scores.keys():
+            self.scores[self.user].append((score, date))
+        else:
+            self.scores[self.user] = [(score, date)]
+        self.save_scores()
+        # except Exception as error:
+        #     logging.error(f"Error while adding score: {error}")
 
     def print_scoreboard(self):
         """
@@ -103,8 +109,21 @@ class Scoreboard:
         while quit == "":
             print(art.scoreboard_art)
             print("\n\n")
-            scores = self.get_scores()
-            print(scores)
-            quit = input("Pulse una tecla para volver al menu.")
-            break
 
+            scores = self.get_scores()
+            parsed_scores = []
+            count = 1
+
+            for key in scores.items():
+                username = key[0]
+                score, date = max(key[1])
+                parsed_scores.append([username, score, date])
+
+            parsed_scores.sort(reverse=True)
+
+            for user in parsed_scores:
+                print(f"{count}.- {user[0]} consiguio {user[1]} puntos el {user[2]}")
+                count += 1
+
+            quit = input("Pulse enter para volver al menu.")
+            break
