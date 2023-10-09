@@ -1,5 +1,5 @@
 # Juego MemoryCards
-# Creado por Aitor & Jon
+# Creado por: Aitor & Jon
 # GitHub: https://www.github.com/aitorias | https://www.github.com/jonfdz
 # Fecha creación: 2023/09/29
 # Última actualización: 2023/10/09
@@ -9,6 +9,7 @@ from game import *
 import scoreboard
 import art
 import time
+
 
 def cls() -> None:
     """

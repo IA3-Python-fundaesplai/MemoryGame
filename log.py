@@ -1,6 +1,6 @@
 # Clase Log para guardar registros de partidas de los usuarios
-# Creado por Aitor
-# GitHub: https://www.github.com/aitorias
+# Creado por: Aitor & Jon
+# GitHub: https://www.github.com/aitorias | https://www.github.com/jonfdz
 # Fecha creación: 2023/09/20
 # Última actualización: 2023/09/29
 # Versión: 1.0

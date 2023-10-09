@@ -1,5 +1,5 @@
-# Clase MemoryCards para definir, generar y controlar las cartas
-# Creado por Aitor & Jon
+# Clase Game para controlar la lógica del juego
+# Creado por: Aitor & Jon
 # GitHub: https://www.github.com/aitorias | https://www.github.com/jonfdz
 # Fecha creación: 2023/09/29
 # Última actualización: 2023/10/08

@@ -1,5 +1,5 @@
 # Clase Scoreboard gestionar las puntuaciones del usuario.
-# Creado por Aitor & Jon
+# Creado por: Aitor & Jon
 # GitHub: https://www.github.com/aitorias | https://www.github.com/jonfdz
 # Fecha creación: 2023/09/22
 # Última actualización: 2023/10/09
@@ -72,9 +72,13 @@ class Scoreboard:
         try:
             with open("scores.json", "r") as file:
                 scores = json.load(file)
+        except FileNotFoundError:
+            scores = {}
+            print("No tienes puntuaciones.")
         except json.decoder.JSONDecodeError as error:
             scores = {}
-            logging.error(f"File not found error: creating file.")
+            logging.error(
+                f"File not found error: creating file. Error: {error}")
         return scores
 
     def save_scores(self):
@@ -122,7 +126,8 @@ class Scoreboard:
             parsed_scores.sort(reverse=True)
 
             for user in parsed_scores:
-                print(f"{count}.- {user[0]} consiguio {user[1]} puntos el {user[2]}")
+                print(
+                    f"{count}.- {user[0]} consiguio {user[1]} puntos el {user[2]}")
                 count += 1
 
             quit = input("Pulse enter para volver al menu.")
