@@ -113,7 +113,6 @@ class Scoreboard:
 
             for key in scores.items():
                 username = key[0]
-                # score, date = max(key[1])
                 score, date = reduce(lambda a, b: a if a[0] > b[0] else b, key[1])
                 parsed_scores.append([username, score, date])
 
