@@ -70,7 +70,6 @@ class Game(MemoryCards):
 
         # Variables del juego
         current_round = 1
-        matched_pairs = 0
         user_score = 0
 
         self.cls()
@@ -134,7 +133,6 @@ class Game(MemoryCards):
                 time.sleep(1)
                 # Comproacion de si la pareja es correcta o incorrecta
                 if MemoryCards.is_same_as(cards[card_choice1], cards[card_choice2]):
-                    matched_pairs += 1
                     user_score += user_turns
                     self.cls()
                     self.print_cards(cards)
@@ -152,7 +150,6 @@ class Game(MemoryCards):
                 # Comprobacion de si el jugador ha encontrado todas las parejas para pasar de ronda
                 if self.num_cards == len(list(filter(lambda x: x.flipped, cards))):
                     current_round += 1
-                    matched_pairs = 0
                     self.cls()
                     print(art.next_round)
                     time.sleep(3)
