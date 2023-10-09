@@ -124,5 +124,5 @@ class Scoreboard:
                 print(f"{count}.- {user[0]} consiguio {user[1]} puntos el {user[2]}")
                 count += 1
 
-            quit = input("Pulse enter para volver al menu.")
+            quit = input("\nPulse enter para volver al menu.")
             break
