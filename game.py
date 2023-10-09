@@ -69,6 +69,7 @@ class Game(MemoryCards):
         Args:
             num_cards (int): El número de cartas en el juego.
         """
+
         # Variables del juego
         current_round = 1
         user_score = 0
@@ -105,7 +106,9 @@ class Game(MemoryCards):
                     print(
                         f"Ronda {current_round} ---------- Tienes {user_turns} turnos ---------- Puntuación: {user_score}"
                     )
+
                 # Eleccion de la primera carta
+
                 card_choice1 = int(input("Elige una carta: ")) - 1
 
                 if cards[card_choice1].flipped:
