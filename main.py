@@ -27,7 +27,7 @@ if __name__ == "__main__":
         cls()
         print(art.welcome)
         choice = input(
-            "Seleccione una opción: \n \
+            "Selecciona una opción: \n \n \
             1. Jugar \n \
             2. Clasificación \n \
             3. Salir \n"

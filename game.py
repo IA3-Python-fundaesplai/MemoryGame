@@ -87,7 +87,7 @@ class Game(MemoryCards):
             print(
                 "\n------------------------------------\nMEMORIZA LAS PAREJAS\n------------------------------------\n"
             )
-            time.sleep(2)
+            time.sleep(5)
             self.cls()
 
             for card in cards:
@@ -136,6 +136,7 @@ class Game(MemoryCards):
                 cards[card_choice2].flip()
                 print(cards[card_choice2])
                 time.sleep(1)
+
                 # Comproacion de si la pareja es correcta o incorrecta
                 if MemoryCards.is_same_as(cards[card_choice1], cards[card_choice2]):
                     user_score += user_turns
@@ -152,6 +153,7 @@ class Game(MemoryCards):
                     print(
                         "\n------------------------------------\nIncorrecto\n------------------------------------\n"
                     )
+
                 # Comprobacion de si el jugador ha encontrado todas las parejas para pasar de ronda
                 if self.num_cards == len(list(filter(lambda x: x.flipped, cards))):
                     current_round += 1
@@ -161,6 +163,7 @@ class Game(MemoryCards):
                     self.cls()
                     break
                 user_turns -= 1
+
                 # Comprueba si se han acabado los turnos para terminar el juego
                 if user_turns == 0:
                     self.cls()
@@ -168,10 +171,14 @@ class Game(MemoryCards):
                     print(
                         f"\n----------------------------------------\n¡Te has quedado sin turnos! Has conseguido {user_score} puntos\n----------------------------------------\n"
                     )
+                    print(
+                        f"\n----------------------------------------\nGenerando puntuaciones. Espera un momento...\n----------------------------------------\n"
+                    )
                     time.sleep(3)
                     self.cls()
                     game_on = False
                     continue
+
         # Guarda la puntuacion y vuelve al menu
         self.scoreboard.add_score(user_score)
         print("El juego ha finalizado.")

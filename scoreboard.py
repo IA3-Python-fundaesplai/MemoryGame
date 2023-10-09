@@ -117,7 +117,7 @@ class Scoreboard:
 
             for user in parsed_scores:
                 print(
-                    f"{count}.- {user[0]} consiguio {user[1]} puntos el {user[2]}")
+                    f"{count}.- {user[0]}: {user[1]} puntos | Fecha: {user[2]}")
                 count += 1
 
             quit = input("\nPulse enter para volver al menu.")
