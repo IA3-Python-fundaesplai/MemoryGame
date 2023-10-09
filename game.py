@@ -150,8 +150,7 @@ class Game(MemoryCards):
                         "\n------------------------------------\nIncorrecto\n------------------------------------\n"
                     )
                 # Comprobacion de si el jugador ha encontrado todas las parejas para pasar de ronda
-                if matched_pairs == self.card_pairs:
-                    # user_turns = self.calculate_turns() - current_round
+                if self.num_cards == len(list(filter(lambda x: x.flipped, cards))):
                     current_round += 1
                     matched_pairs = 0
                     self.cls()
