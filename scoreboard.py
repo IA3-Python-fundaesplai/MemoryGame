@@ -97,6 +97,11 @@ class Scoreboard:
             self.scores[self.user] = [(score, date)]
         self.save_scores()
 
+    def parse_list(self, item):
+        username = item[0]
+        score, date = reduce(lambda a, b: a if a[0] > b[0] else b, item[1])
+        return [username, score, date]
+
     def print_scoreboard(self):
         """
         Funcion para printear la clasificacion ordenada en pantalla
@@ -111,10 +116,7 @@ class Scoreboard:
             parsed_scores = []
             count = 1
 
-            for key in scores.items():
-                username = key[0]
-                score, date = reduce(lambda a, b: a if a[0] > b[0] else b, key[1])
-                parsed_scores.append([username, score, date])
+            parsed_scores = list(map(self.parse_list, scores.items()))
 
             parsed_scores.sort(key=lambda x: x[1], reverse=True)
 
