@@ -41,9 +41,8 @@ class MemoryCards(Card):
         super().__init__(suit, value)
         self.matched = False
 
-
     @staticmethod
-    def is_same_as(card: 'MemoryCards', other_card: 'MemoryCards') -> bool:
+    def is_same_as(card: "MemoryCards", other_card: "MemoryCards") -> bool:
         """
         Comprueba si dos cartas son iguales comparando sus valores y palos.
 
@@ -66,7 +65,9 @@ class MemoryCards(Card):
         return self.matched
 
     @staticmethod
-    def get_flipped_cards(random_memory_cards: List['MemoryCards']) -> List['MemoryCards']:
+    def get_flipped_cards(
+        random_memory_cards: List["MemoryCards"],
+    ) -> List["MemoryCards"]:
         """
         Devuelve una lista de cartas volteadas a partir de una lista de cartas aleatoria.
 
@@ -79,7 +80,7 @@ class MemoryCards(Card):
         return [card for card in random_memory_cards if card.flipped]
 
     @classmethod
-    def shuffle_pairs(cls, number_of_pairs: int) -> List['MemoryCards']:
+    def shuffle_pairs(cls, number_of_pairs: int) -> List["MemoryCards"]:
         """
         Método de clase que baraja pares de cartas.
         Genera una lista de pares de cartas seleccionando aleatoriamente cartas de entre todas las posibles y luego barajando la lista.
@@ -92,8 +93,10 @@ class MemoryCards(Card):
         """
         all_cards = cls.generate_all_cards()
         random_pairs = random.sample(all_cards, number_of_pairs)
-        
-        random_cards = [copy.deepcopy(card) for card in random_pairs] + [copy.deepcopy(card) for card in random_pairs]
+
+        random_cards = [copy.deepcopy(card) for card in random_pairs] + [
+            copy.deepcopy(card) for card in random_pairs
+        ]
 
         random.shuffle(random_cards)
 

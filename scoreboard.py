@@ -1,8 +1,8 @@
-# Clase Scoreboard para guardar el registro de puntuaciones del usuario.
-# Creado por Aitor
-# GitHub: https://www.github.com/aitorias
+# Clase Scoreboard gestionar las puntuaciones del usuario.
+# Creado por Aitor & Jon
+# GitHub: https://www.github.com/aitorias | https://www.github.com/jonfdz
 # Fecha creación: 2023/09/22
-# Última actualización: 2023/09/29
+# Última actualización: 2023/10/09
 # Versión: 1.0
 
 import datetime
@@ -10,6 +10,7 @@ import json
 import locale
 import logging
 import os
+import art
 
 
 class Scoreboard:
@@ -71,6 +72,7 @@ class Scoreboard:
         except FileNotFoundError as error:
             self.scores = []
             logging.error(f'File not found error: {error}')
+        return self.scores
 
     def save_scores(self):
         """
@@ -91,3 +93,18 @@ class Scoreboard:
             self.save_scores()
         except Exception as error:
             logging.error(f'Error while adding score: {error}')
+
+    def print_scoreboard(self):
+        """
+        Funcion para printear la clasificacion en pantalla
+        """
+        quit = ""
+
+        while quit == "":
+            print(art.scoreboard_art)
+            print("\n\n")
+            scores = self.get_scores()
+            print(scores)
+            quit = input("Pulse una tecla para volver al menu.")
+            break
+
