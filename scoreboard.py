@@ -1,17 +1,18 @@
 # Clase Scoreboard gestionar las puntuaciones del usuario.
-# Creado por Aitor & Jon
+# Creado por: Aitor & Jon
 # GitHub: https://www.github.com/aitorias | https://www.github.com/jonfdz
 # Fecha creación: 2023/09/22
 # Última actualización: 2023/10/09
 # Versión: 1.0
 
-from functools import reduce
+import art
 import datetime
 import json
 import locale
-import logging
 import os
-import art
+from functools import reduce
+
+from log import Log
 
 
 class Scoreboard:
@@ -19,10 +20,11 @@ class Scoreboard:
         """
         Constructor de la clase Scoreboard
         """
-        user_loggin = self.get_player_loggin()
-        self.user = ""
+        self.user = self.get_player_username()
         self.language = locale.getdefaultlocale()[0]
         self.scores = {}
+
+        self.log = Log(user=self.user, log_file=f'{self.user}-log.log')
 
     def __str__(self):
         """
@@ -30,21 +32,21 @@ class Scoreboard:
         """
         return f"Jugador: {self.user} | Puntuaciones: {self.scores}"
 
-    def get_player_loggin(self):
+    def get_player_username(self):
         """
         Función que retorna el nombre de usuario de inicio de sesión del sistema
         para utilizarlo como username del juego.
         """
         # Obtenemos el usuario del sistema
         try:
-            username_loggin = os.getlogin()
+            username = os.getlogin()
         except OSError:
             """
             Si se usa una máquina virtual o WSL en Windows, os.getlogin() da error.
             Para ello, usamos el módulo de Python pwd para obtener el nombre del usuario de la máquina.
             """
-            username_loggin = input("Introduzca su nombre: ")
-        return f"{username_loggin}"
+            username = input("Introduzca su nombre: ")
+        return f"{username}"
 
     def get_actual_date(self):
         """
@@ -62,7 +64,7 @@ class Scoreboard:
                 date_format = "%A %d %B %Y"
             locale.setlocale(locale.LC_TIME, self.language)
         except locale.Error as error:
-            logging.error(f"Locale error occurred: {error}")
+            self.log.log_error(f"Locale error occurred: {error}")
         return datetime.datetime.now().strftime(date_format)
 
     def get_scores(self):
@@ -72,9 +74,14 @@ class Scoreboard:
         try:
             with open("scores.json", "r") as file:
                 scores = json.load(file)
+        except FileNotFoundError:
+            print(
+                "No tienes puntuaciones previas. A partir de ahora guardaremos tus puntuaciones.")
+            scores = {}
         except json.decoder.JSONDecodeError as error:
             scores = {}
-            logging.error(f"File not found error: creating file.")
+            self.log.log_error(
+                f"File not found error: creating file. Error: {error}")
         return scores
 
     def save_scores(self):
@@ -91,11 +98,16 @@ class Scoreboard:
         date = self.get_actual_date()
         self.user = input("Introduzca su nombre: ").upper()
         self.scores = self.get_scores()
+
         if self.user in self.scores.keys():
             self.scores[self.user].append((score, date))
         else:
             self.scores[self.user] = [(score, date)]
+
         self.save_scores()
+
+        log_message = f'Puntuación {score} para el jugador {self.user} en {date} añadida correctamente.'
+        self.log.log_info(log_message)
 
     def parse_list(self, item):
         username = item[0]
@@ -121,7 +133,8 @@ class Scoreboard:
             parsed_scores.sort(key=lambda x: x[1], reverse=True)
 
             for user in parsed_scores:
-                print(f"{count}.- {user[0]} consiguio {user[1]} puntos el {user[2]}")
+                print(
+                    f"{count}.- {user[0]} consiguio {user[1]} puntos el {user[2]}")
                 count += 1
 
             quit = input("\nPulse enter para volver al menu.")

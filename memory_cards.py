@@ -1,6 +1,6 @@
 # Clase MemoryCards para definir, generar y controlar las cartas
-# Creado por Aitor
-# GitHub: https://www.github.com/aitorias
+# Creado por: Aitor & Jon
+# GitHub: https://www.github.com/aitorias | https://www.github.com/jonfdz
 # Fecha creación: 2023/09/29
 # Última actualización: 2023/10/07
 # Versión: 1.0

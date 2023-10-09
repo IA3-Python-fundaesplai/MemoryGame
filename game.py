@@ -1,13 +1,15 @@
-# Clase MemoryCards para definir, generar y controlar las cartas
-# Creado por Aitor & Jon
+# Clase Game para controlar la lógica del juego
+# Creado por: Aitor & Jon
 # GitHub: https://www.github.com/aitorias | https://www.github.com/jonfdz
 # Fecha creación: 2023/09/29
 # Última actualización: 2023/10/08
 # Versión: 1.0
 
+import art
 import os
 import time
-import art
+
+# Improtamos las clases MemoryCards y Scoreboard
 from memory_cards import MemoryCards
 from scoreboard import Scoreboard
 
@@ -75,6 +77,7 @@ class Game(MemoryCards):
         self.cls()
 
         game_on = True
+
         # Comienza el juego
         while game_on:
             cards = MemoryCards.shuffle_pairs(self.card_pairs)
@@ -103,7 +106,9 @@ class Game(MemoryCards):
                     print(
                         f"Ronda {current_round} ---------- Tienes {user_turns} turnos ---------- Puntuación: {user_score}"
                     )
-                #Eleccion de la primera carta
+
+                # Eleccion de la primera carta
+
                 card_choice1 = int(input("Elige una carta: ")) - 1
 
                 if cards[card_choice1].flipped:

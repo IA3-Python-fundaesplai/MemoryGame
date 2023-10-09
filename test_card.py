@@ -1,6 +1,6 @@
 # Clase TestCard para hacer test sobre la clase Card
-# Creado por: Aitor
-# GitHub: https://www.github.com/aitorias
+# Creado por: Aitor & Jon
+# GitHub: https://www.github.com/aitorias | https://www.github.com/jonfdz
 # Fecha creación: 2023/10/07
 # Última actualización: 2023/10/07
 # Versión: 1.0

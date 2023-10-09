@@ -1,5 +1,7 @@
 __pycache__
 .idea
 .vscode
+*-log.log
 scores.json
 .DS_Store
+
