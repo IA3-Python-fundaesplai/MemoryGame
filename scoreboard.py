@@ -5,13 +5,15 @@
 # Última actualización: 2023/10/09
 # Versión: 1.0
 
-from functools import reduce
+import art
 import datetime
 import json
 import locale
 import logging
 import os
-import art
+from functools import reduce
+
+from log import Log
 
 
 class Scoreboard:
@@ -19,10 +21,12 @@ class Scoreboard:
         """
         Constructor de la clase Scoreboard
         """
-        user_loggin = self.get_player_loggin()
-        self.user = ""
+        self.user = self.get_player_username()
         self.language = locale.getdefaultlocale()[0]
         self.scores = {}
+
+        self.log = Log(
+            user=self.user, log_file=f'{self.user}-log.log')
 
     def __str__(self):
         """
@@ -30,21 +34,21 @@ class Scoreboard:
         """
         return f"Jugador: {self.user} | Puntuaciones: {self.scores}"
 
-    def get_player_loggin(self):
+    def get_player_username(self):
         """
         Función que retorna el nombre de usuario de inicio de sesión del sistema
         para utilizarlo como username del juego.
         """
         # Obtenemos el usuario del sistema
         try:
-            username_loggin = os.getlogin()
+            username = os.getlogin()
         except OSError:
             """
             Si se usa una máquina virtual o WSL en Windows, os.getlogin() da error.
             Para ello, usamos el módulo de Python pwd para obtener el nombre del usuario de la máquina.
             """
-            username_loggin = input("Introduzca su nombre: ")
-        return f"{username_loggin}"
+            username = input("Introduzca su nombre: ")
+        return f"{username}"
 
     def get_actual_date(self):
         """
@@ -73,8 +77,9 @@ class Scoreboard:
             with open("scores.json", "r") as file:
                 scores = json.load(file)
         except FileNotFoundError:
+            print(
+                "No tienes puntuaciones previas. A partir de ahora guardaremos tus puntuaciones.")
             scores = {}
-            print("No tienes puntuaciones.")
         except json.decoder.JSONDecodeError as error:
             scores = {}
             logging.error(
@@ -92,17 +97,20 @@ class Scoreboard:
         """
         Función para añadir una nueva puntuación al scoreboard
         """
-        # try:
         date = self.get_actual_date()
+
         self.user = input("Introduzca su nombre: ").upper()
         self.scores = self.get_scores()
+
         if self.user in self.scores.keys():
             self.scores[self.user].append((score, date))
         else:
             self.scores[self.user] = [(score, date)]
+
         self.save_scores()
-        # except Exception as error:
-        #     logging.error(f"Error while adding score: {error}")
+
+        log_message = f'Puntuación {score} para el jugador {self.user} en {date} añadida correctamente.'
+        self.log.log_info(log_message)
 
     def print_scoreboard(self):
         """

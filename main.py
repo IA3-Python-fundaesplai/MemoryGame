@@ -5,10 +5,13 @@
 # Última actualización: 2023/10/09
 # Versión: 1.0
 
-from game import *
-import scoreboard
+
 import art
 import time
+
+# Improtamos las clases Scoreboard y Game
+from scoreboard import Scoreboard
+from game import *
 
 
 def cls() -> None:

@@ -8,6 +8,8 @@
 import os
 import time
 import art
+
+# Improtamos las clases MemoryCards y Scoreboard
 from memory_cards import MemoryCards
 from scoreboard import Scoreboard
 

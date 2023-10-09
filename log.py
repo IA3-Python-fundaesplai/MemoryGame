@@ -8,42 +8,16 @@
 import datetime
 import locale
 import logging
-import os
 
 
 class Log:
-    def __init__(self):
-        """
-        Constructor de la clase Log
-        """
-        user = self.get_player_username()
+    def __init__(self, user, log_file='log.log', log_level=logging.INFO):
         self.user = user
         self.language = locale.getdefaultlocale()[0]
-        self.log_file = f'{self.user}-log.log'
-        logging.basicConfig(filename=self.log_file, level=logging.INFO,
+        self.log_file = log_file
+
+        logging.basicConfig(filename=self.log_file, level=log_level,
                             format='%(asctime)s - %(levelname)s - %(message)s')
-
-    def __str__(self):
-        """
-        Representación de una instancia de la clase Log
-        """
-        return f'Jugador: {self.user}'
-
-    def get_player_username(self):
-        """
-        Función que retorna el nombre de usuario de inicio de sesión del sistema 
-        para utilizarlo como username del juego.
-        """
-        # Obtenemos el usuario del sistema
-        try:
-            username = os.getlogin()
-        except OSError:
-            '''
-            Si se usa una máquina virtual o WSL en Windows, os.getlogin() da error.
-            Para ello, usamos el módulo de Python pwd para obtener el nombre del usuario de la máquina.
-            '''
-            username = input("Introduzca su nombre:")
-        return f'{username}'
 
     def get_actual_date(self):
         """
@@ -73,8 +47,26 @@ class Log:
         with open(self.log_file, 'a') as file:
             logging.info(f'Log file generated for {self.user} on {date}')
 
-    def log(self, message):
+    def log_info(self, message):
         """
-        Función para guardar los logs
+        Logs an informational message.
         """
-        logging.info(message)
+        logging.info(f'[{self.user}] {message}')
+
+    def log_warning(self, message):
+        """
+        Logs a warning message.
+        """
+        logging.warning(f'[{self.user}] {message}')
+
+    def log_error(self, message):
+        """
+        Logs an error message.
+        """
+        logging.error(f'[{self.user}] {message}')
+
+    def log_critical(self, message):
+        """
+        Logs a critical error message.
+        """
+        logging.critical(f'[{self.user}] {message}')
