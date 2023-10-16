@@ -1,8 +1,8 @@
-# Clase Database para gestionar la base de datos
-# Creado por: Aitor
-# GitHub: https://www.github.com/aitorias
+# Clase Game para controlar la lógica del juego
+# Creado por: Aitor & Jon
+# GitHub: https://www.github.com/aitorias | https://www.github.com/jonfdz
 # Fecha creación: 2023/10/08
-# Última actualización: 2023/10/08
+# Última actualización: 2023/10/16
 # Versión: 1.0
 
 import logging
