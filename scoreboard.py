@@ -12,6 +12,7 @@ import locale
 from functools import reduce
 
 from log import Log
+from database import Database
 
 
 class Scoreboard:
@@ -21,9 +22,10 @@ class Scoreboard:
         """
         self.user = "player_1"
         self.language = locale.getdefaultlocale()[0]
-        self.scores = {}
+        self.score = 0
 
         self.log = Log(log_file=f'{self.user}-log.log')
+        self.db = Database()
 
     def __str__(self):
         """
@@ -54,40 +56,19 @@ class Scoreboard:
         """
         Función que carga las puntuaciones desde el archivo JSON y si no existe lo crea
         """
-        try:
-            with open("scores.json", "r") as file:
-                scores = json.load(file)
-        except FileNotFoundError:
-            print(
-                "No tienes puntuaciones previas. A partir de ahora guardaremos tus puntuaciones.")
-            scores = {}
-        except json.decoder.JSONDecodeError as error:
-            scores = {}
-            self.log.log_error(
-                f"File not found error: creating file. Error: {error}")
-        return scores
 
-    def save_scores(self):
-        """
-        Función que guarda las puntuaciones en el archivo JSON
-        """
-        with open("scores.json", "w", encoding="UTF-8") as file:
-            json.dump(self.scores, file, ensure_ascii=False)
+        scores = self.db.fetch_query("SELECT * FROM scoreboard")
+        return scores
 
     def add_score(self, score):
         """
-        Función para añadir una nueva puntuación al scoreboard
+        Función para añadir una nueva puntuación a la database scores.db
         """
         date = self.get_actual_date()
         self.user = input("Introduzca su nombre: ").upper()
-        self.scores = self.get_scores()
+        self.score = score
 
-        if self.user in self.scores.keys():
-            self.scores[self.user].append((score, date))
-        else:
-            self.scores[self.user] = [(score, date)]
-
-        self.save_scores()
+        self.db.commit_query("INSERT INTO scoreboard (fecha, nombre, puntuacion) VALUES (?, ?, ?)", (datetime.datetime.now(), self.user, self.score))
 
         log_message = f'Puntuación {score} para el jugador {self.user} en {date} añadida correctamente.'
         self.log.log_info(log_message)
@@ -122,3 +103,7 @@ class Scoreboard:
 
             quit = input("\nPulse enter para volver al menu.")
             break
+
+scoreboard = Scoreboard()
+
+scoreboard.print_scoreboard()

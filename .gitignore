@@ -4,4 +4,5 @@ __pycache__
 *-log.log
 scores.json
 .DS_Store
-
+mi_base_de_datos.db
+scores.db
