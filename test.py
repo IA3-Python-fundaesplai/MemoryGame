@@ -36,7 +36,7 @@ class Menu(ctk.CTkFrame):
         self.configure(fg_color=BACKGROUND_COLOR)
         self.pack(expand=True)
 
-        self.bg_img = PhotoImage(file="images/fondo_menu.png")
+        self.bg_img = PhotoImage(file="images/assets/fondo_menu.png")
         self.bg_canvas = ctk.CTkCanvas(self)
         self.bg_canvas.pack(expand=True, fill="both")
         self.bg_canvas.create_image(0, 0, image=self.bg_img, anchor="nw")
@@ -50,7 +50,7 @@ class Menu(ctk.CTkFrame):
         )
         self.score_label.place(x=300, y=350)
 
-        self.button_play_img = PhotoImage(file="images/boton_jugar.png")
+        self.button_play_img = PhotoImage(file="images/assets/boton_jugar.png")
         self.button_play = Button(
             master=self.bg_canvas,
             image=self.button_play_img,
@@ -61,7 +61,7 @@ class Menu(ctk.CTkFrame):
         )
         self.button_play.place(x=840, y=150)
         # self.button_play.grid(row=0, column=1, padx=50, pady=50, sticky="e")
-        self.button_help_img = PhotoImage(file="images/boton_reglas.png")
+        self.button_help_img = PhotoImage(file="images/assets/boton_reglas.png")
         self.button_help = Button(
             master=self.bg_canvas,
             image=self.button_help_img,
@@ -72,7 +72,7 @@ class Menu(ctk.CTkFrame):
         )
         self.button_help.place(x=840, y=350)
         # self.button_help.grid(row=1, column=1, padx=50, pady=50)
-        self.button_exit_img = PhotoImage(file="images/boton_salir.png")
+        self.button_exit_img = PhotoImage(file="images/assets/boton_salir.png")
         self.button_exit = Button(
             master=self.bg_canvas,
             image=self.button_exit_img,
@@ -93,42 +93,19 @@ class Game(ctk.CTkFrame):
         self.controller = controller
         self.configure(fg_color=BACKGROUND_COLOR)
 
-        self.bg_img = PhotoImage(file="images/fondo.png")
+        self.bg_img = PhotoImage(file="images/assets/fondo.png")
         self.bg_canvas = ctk.CTkCanvas(self)
         self.bg_canvas.pack(expand=True, fill="both")
         self.bg_canvas.create_image(0, 0, image=self.bg_img, anchor="nw")
 
-        self.back_img = PhotoImage(file="images/back_card.png")
-        self.card_front_img = PhotoImage(file="images/ace_of_hearts.png")
+        self.back_img = PhotoImage(file="images/cards/back_card.png")
+        self.card_front_img = PhotoImage(file="images/cards/ace_of_hearts.png")
         self.card_list = []
         self.count = 0
         self.choice = []
 
-        self.label = ctk.CTkLabel(
-            master=self.bg_canvas,
-            text="Elija la dificultad:",
-            text_color="black",
-            width=200,
-            height=100,
-        )
-        self.label.pack()
+        self.list_cards(0, 8),
 
-        self.button_dif = ctk.CTkButton(
-            master=self.bg_canvas,
-            text="Facil",
-            width=200,
-            height=100,
-            command=lambda: self.list_cards(0, 4),
-        )
-        self.button_dif.pack()
-        self.button_dif = ctk.CTkButton(
-            master=self.bg_canvas,
-            text="Dificil",
-            width=200,
-            height=100,
-            command=lambda: self.list_cards(0, 8),
-        )
-        self.button_dif.pack()
 
     def generate_card(self, index, image):
         """Funcion que genera un boton que representa una carta."""
