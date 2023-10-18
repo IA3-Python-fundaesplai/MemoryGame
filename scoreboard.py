@@ -72,3 +72,17 @@ class Scoreboard:
 
             quit = input("\nPulse enter para volver al menu.")
             break
+
+    def score_label(self):
+        '''
+        Funcion para parsear los scores en un texto para el label del juego
+        '''
+        count = 1
+        text_list = []
+        scores = self.db.fetch_query('SELECT nombre, max(puntuacion), STRFTIME("%d-%m-%Y", fecha) FROM scoreboard GROUP BY nombre ORDER BY puntuacion DESC')
+        for score in scores:
+            text_list.append(f"{count}.- {score[0]}: {score[1]} puntos | Fecha: {score[2]}")
+            count += 1
+            if count == 11:
+                break
+        return "\n".join(text_list)

@@ -1,4 +1,5 @@
 import customtkinter as ctk
+from scoreboard import Scoreboard
 from tkinter import PhotoImage, Button
 
 # Constants
@@ -32,23 +33,24 @@ class App(ctk.CTk):
 class Menu(ctk.CTkFrame):
     def __init__(self, master, controller):
         super().__init__(master)
+        self.scoreboard = Scoreboard()
+        self.scores_db = self.scoreboard.get_scores()
         self.controller = controller
         self.configure(fg_color=BACKGROUND_COLOR)
         self.pack(expand=True)
 
         self.bg_img = PhotoImage(file="images/assets/fondo_menu.png")
+        self.bg_img2 = PhotoImage(file="images/assets/fondo.png", height=300, width=300)
         self.bg_canvas = ctk.CTkCanvas(self)
         self.bg_canvas.pack(expand=True, fill="both")
         self.bg_canvas.create_image(0, 0, image=self.bg_img, anchor="nw")
 
-        # self.score_frame = ctk.CTkFrame(master=self.bg_canvas, bg_color="transparent")
-        # self.score_frame.pack(expand=True, padx=50, pady=50, fill="both", side="left")
-
         self.score_label = ctk.CTkLabel(
             master=self.bg_canvas,
-            text="1. JON 45p",
+            image=self.bg_img2,
+            text=self.scoreboard.score_label(),
         )
-        self.score_label.place(x=300, y=350)
+        self.score_label.place(x=200, y=350)
 
         self.button_play_img = PhotoImage(file="images/assets/boton_jugar.png")
         self.button_play = Button(
@@ -79,7 +81,7 @@ class Menu(ctk.CTkFrame):
             borderwidth=0,
             highlightthickness=1,
             highlightbackground="black",
-            command=lambda: controller.show_frame("Game"),
+            command=lambda: exit(),
         )
         self.button_exit.place(x=840, y=550)
         # self.button_score.grid(row=2, column=1, ipadx=70, ipady=20, padx=50, pady=50)
